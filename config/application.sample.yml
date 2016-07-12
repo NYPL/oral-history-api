@@ -1,0 +1,5 @@
+SECRET_KEY_BASE: <generate via: rake secret>
+PROTOCOL: https://
+ELASTIC_USER: readwrite
+ELASTIC_PASSWORD: xxx
+ELASTIC_HOST: xxx.us-east-1.aws.found.io:9243

@@ -5,8 +5,9 @@ source 'https://rubygems.org'
 gem 'rails', '~> 5.0.0'
 # Use PostgreSQL as the database for Active Record
 gem 'pg'
-# Use Puma as the app server
-gem 'puma', '~> 3.0'
+# Use Unicorn as the app server
+gem 'unicorn'
+
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 # gem 'jbuilder', '~> 2.5'
 # Use Redis adapter to run Action Cable in production
@@ -22,6 +23,9 @@ gem 'puma', '~> 3.0'
 
 # Rails app configuration / ENV management
 gem 'figaro'
+
+# Elastic Search
+gem 'elasticsearch'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
