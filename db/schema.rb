@@ -10,21 +10,30 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160713195108) do
+ActiveRecord::Schema.define(version: 20160714212235) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
+  create_table "ingest_items", force: :cascade do |t|
+    t.string   "doc_uid",    default: "", null: false
+    t.string   "source",     default: "", null: false
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+    t.index ["doc_uid", "source"], name: "index_ingest_items_on_doc_uid_and_source", using: :btree
+  end
+
   create_table "items", force: :cascade do |t|
-    t.string   "index"
-    t.string   "type"
-    t.string   "uid"
-    t.string   "parent"
-    t.text     "data"
+    t.string   "index_name",   default: "", null: false
+    t.string   "doc_type",     default: "", null: false
+    t.string   "doc_uid",      default: "", null: false
+    t.string   "doc_parent",   default: "", null: false
+    t.string   "doc_mappings", default: "", null: false
+    t.text     "doc_data",     default: "", null: false
     t.datetime "indexed_at"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["type", "uid"], name: "index_items_on_type_and_uid", unique: true, using: :btree
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+    t.index ["doc_uid"], name: "index_items_on_doc_uid", unique: true, using: :btree
   end
 
 end
