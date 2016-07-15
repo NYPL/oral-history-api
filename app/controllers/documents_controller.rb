@@ -1,7 +1,7 @@
 class DocumentsController < ApplicationController
 
   def index
-    @resp = Documents.limit(100)
+    @resp = Document.limit(500)
     render :json => @resp
   end
 

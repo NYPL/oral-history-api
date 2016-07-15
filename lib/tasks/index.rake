@@ -30,6 +30,52 @@ namespace :index do
 
   end
 
+  # Usage rake index:create
+  desc "Create elastic search indices"
+  task :create => :environment do |task, args|
+    # Connect to elastic client
+    client = Elasticsearch::Client.new host: elastic_connection_string
+
+    index = Index.new
+    name = index.getDefaultName
+    mappings = index.getMappings
+    settings = index.getSettings
+
+    # Update if it exists
+    if client.indices.exists? index: name
+      puts "Updating index #{name}"
+
+      # Put settings
+      client.indices.put_settings index: name, body: settings
+
+      # Delete mappings
+      oldMappings = client.indices.get_mapping index: name
+      oldTypes = oldMappings.keys
+      newTypes = mappings.keys
+      removedTypes = oldTypes - newTypes
+      removedTypes.each do |type|
+        client.indices.delete_mapping index: name, type: type
+      end
+      if removedTypes.length > 0
+        puts "Removing mapping types: #{removedTypes.join(", ")}"
+      end
+
+      # Put mappings
+      mappings.each do |type, body|
+        client.indices.put_mapping index: index[:name], type: type, body: body
+      end
+
+    # Otherwise create
+    else
+      puts "Creating index #{name}"
+      client.indices.create( index: name, body: {
+        settings: mappings,
+        mappings: settings
+      })
+    end
+
+  end
+
   def batch_list(list, size)
     batches = []
     batch_count = (Float(list.length) / size).ceil
@@ -71,12 +117,6 @@ namespace :index do
     end
 
     elastic
-  end
-
-  # Usage rake index:create
-  desc "Create elastic search indices"
-  task :create => :environment do |task, args|
-
   end
 
 end
