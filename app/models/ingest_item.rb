@@ -1,9 +1,9 @@
 class IngestItem < ApplicationRecord
 
   def self.getLastDate(source)
-    date = Item.getVeryEarlyDate
-    item = IngestItem.order(:created_at).last
-    date = item[:created_at] if item
+    date = Document.getVeryEarlyDate
+    document = IngestItem.where(source: source).order(:created_at).last
+    date = document[:created_at] if document
     date
   end
 

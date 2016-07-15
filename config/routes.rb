@@ -1,9 +1,9 @@
 Rails.application.routes.draw do
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 
-  resources :items
+  resources :documents
 
-  get 'search', to: 'items#search'
+  get 'search', to: 'documents#search'
 
-  root 'items#index'
+  root 'documents#index'
 end

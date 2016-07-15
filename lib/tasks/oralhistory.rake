@@ -17,24 +17,24 @@ namespace :oralhistory do
     source = "oralhistory.nypl.org"
     items = oh_get_items(source, args.updated_after)
     total = items.length
-    puts "Attempting to ingest #{total} items from Oral History"
+    puts "Attempting to ingest #{total} items from #{source}"
 
     # Download and save each item
     items.each_with_index do |item, i|
+      item_id = item["slug"]
       # check to see if data is up-to-date
-      upToDate = IngestItem.isUpToDate(item["slug"], source, item["updated_at"].to_datetime)
+      upToDate = IngestItem.isUpToDate(item_id, source, item["updated_at"].to_datetime)
       if upToDate
         puts "Skipping #{i+1} of #{total}"
         next
-      else
-        IngestItem.save({doc_uid: item["slug"], source: source})
       end
       # otherwise, request data
       itemData = oh_get_item_data(item["url"])
       # puts itemData.inspect
       itemData.each do |entry|
-        Item.saveEntry(entry, args.overwrite)
+        Document.saveEntry(entry, args.overwrite)
       end
+      IngestItem.save({doc_uid: item_id, source: source})
       puts "Saved #{i+1} of #{total}"
     end
 

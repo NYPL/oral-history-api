@@ -39,7 +39,7 @@ module Oralhistory
     item_id = resp["slug"]
 
     # build item data
-    item_entry = {index_name: "items", doc_type: "item", doc_uid: item_id, doc_mappings: Item.defaultItemMappings, doc_data: ""}
+    item_entry = {index_name: "items", doc_type: "item", doc_uid: item_id, doc_data: ""}
     item_data = parse_attributes(resp, attributes)
     if item_data
       item_entry[:doc_data] = item_data.to_json

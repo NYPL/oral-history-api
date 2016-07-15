@@ -12,7 +12,7 @@ module Transcripteditor
     item_id = resp["id"]
 
     # build item data
-    item_entry = {index_name: "items", doc_type: "item", doc_uid: item_id, doc_mappings: Item.defaultItemMappings, doc_data: ""}
+    item_entry = {index_name: "items", doc_type: "item", doc_uid: item_id, doc_data: ""}
     item_data = parse_attributes(resp, attributes)
     if item_data
       item_entry[:doc_data] = item_data.to_json
@@ -25,6 +25,7 @@ module Transcripteditor
   def te_get_item_json(url)
     resp = json_request(url)
     return false unless resp
+    resp
   end
 
   def te_get_items(source, updated_after)
@@ -33,7 +34,7 @@ module Transcripteditor
     date = updated_after.to_datetime if updated_after
     resp = json_request("#{ENV['TRANSCRIPT_EDITOR_URL']}/transcript_files.json?updated_after=#{date.strftime("%Y-%m-%d")}")
     # TODO: handle pagination
-    resp.entries
+    resp["entries"]
   end
 
   def te_get_line_data(resp)
