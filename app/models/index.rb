@@ -1,7 +1,11 @@
 class Index
 
+  def self.defaultName
+    ENV['INDEX_NAME'] || 'primary'
+  end
+
   def getDefaultName
-    "primary"
+    Index.defaultName
   end
 
   def getMappings

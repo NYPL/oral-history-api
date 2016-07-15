@@ -3,3 +3,5 @@ PROTOCOL: https://
 ELASTIC_USER: readwrite
 ELASTIC_PASSWORD: xxx
 ELASTIC_HOST: xxx.us-east-1.aws.found.io:9243
+TRANSCRIPT_EDITOR_URL: http://opentranscripteditor.org
+INDEX_NAME: primary
