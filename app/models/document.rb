@@ -22,7 +22,7 @@ class Document < ApplicationRecord
   end
 
   def self.markListAsIndexed(list)
-    Document.where(uid: list).update_all(indexed_at: Time.now)
+    Document.where(doc_uid: list).update_all(indexed_at: Time.now)
   end
 
   def self.saveEntry(entry, overwrite)

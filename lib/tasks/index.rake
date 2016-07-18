@@ -2,20 +2,25 @@ require 'elasticsearch'
 
 namespace :index do
 
-  # Usage rake index:build[100]
-  # Usage rake index:build[100,rebuild]
+  # Usage rake index:build[500]
+  # Usage rake index:build[500,rebuild]
   desc "Build elastic search index"
   task :build, [:batch_size, :rebuild] => :environment do |task, args|
     args.with_defaults(:batch_size => 500, :rebuild => false)
+
+    batch_size = args.batch_size.to_i
 
     # Connect to elastic client
     client = Elasticsearch::Client.new host: elastic_connection_string
 
     # Get documents in elastic format for indexing
+    puts "Retrieving documents for indexing..."
     documents = get_elastic_documents(args.rebuild)
+    puts "#{documents.length} documents ready for indexing..."
 
     # Create batches of documents to index in bulk
-    batches = batch_list(documents, args.batch_size)
+    batches = batch_list(documents, batch_size)
+    puts "#{batches.length} batches created of size #{batch_size}"
 
     # CREATE/PUT in batches
     batch_count = batches.length
@@ -62,18 +67,32 @@ namespace :index do
 
       # Put mappings
       mappings.each do |type, body|
-        client.indices.put_mapping index: index[:name], type: type, body: body
+        client.indices.put_mapping index: name, type: type, body: body
       end
 
     # Otherwise create
     else
       puts "Creating index #{name}"
       client.indices.create( index: name, body: {
-        settings: mappings,
-        mappings: settings
+        settings: settings,
+        mappings: mappings
       })
     end
 
+  end
+
+  # Usage rake index:info[primary]
+  desc "Get elastic search index info"
+  task :info, [:name] => :environment do |task, args|
+    args.with_defaults(:name => Index.defaultName)
+
+    # Connect to elastic client
+    client = Elasticsearch::Client.new host: elastic_connection_string
+
+    info = client.indices.get index: args.name
+
+    puts "Info for index #{args.name}:"
+    puts info.inspect
   end
 
   def batch_list(list, size)
@@ -99,6 +118,8 @@ namespace :index do
     documents = Document.getDocumentsForIndexing
     documents = Document.all if rebuild
     elastic = []
+
+    puts "#{documents.length} documents retrieved from database..."
 
     documents.each do |document|
       entry = {

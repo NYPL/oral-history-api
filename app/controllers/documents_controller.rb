@@ -8,7 +8,7 @@ class DocumentsController < ApplicationController
   def search
     client = Elasticsearch::Client.new host: elastic_connection_string
 
-    @resp = client.search q: 'new york'
+    @resp = client.search q: params[:q]
     render :json => @resp
   end
 
