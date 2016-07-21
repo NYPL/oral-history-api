@@ -83,6 +83,7 @@ GEM
     pg (0.18.4)
     pkg-config (1.1.7)
     rack (2.0.1)
+    rack-cors (0.4.0)
     rack-test (0.6.3)
       rack (>= 1.0)
     rails (5.0.0)
@@ -146,6 +147,7 @@ DEPENDENCIES
   listen (~> 3.0.5)
   newrelic_rpm
   pg
+  rack-cors
   rails (~> 5.0.0)
   spring
   spring-watcher-listen (~> 2.0.0)
