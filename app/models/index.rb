@@ -48,11 +48,11 @@ class Index
             },{
               match: { description: query }
             },{
-              has_child: { type: "annotation", query: { match: { text: query } }, inner_hits: {} }
+              has_child: { type: "annotation", query: { match: { text: query } }, inner_hits: { highlight: { fields: { text: {} } } } }
             },{
-              has_child: { type: "line", query: { match: { best_text: query } }, inner_hits: {} }
+              has_child: { type: "line", query: { match: { best_text: query } }, inner_hits: { highlight: { fields: { best_text: {} } } } }
             },{
-              has_child: { type: "line", query: { match: { original_text: query } }, inner_hits: { name: "original_line" } }
+              has_child: { type: "line", query: { match: { original_text: query } }, inner_hits: { name: "original_line", highlight: { fields: { original_text: {} } } } }
             }
           ]
         }
