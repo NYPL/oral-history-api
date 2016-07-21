@@ -75,6 +75,7 @@ GEM
     minitest (5.9.0)
     multi_json (1.12.1)
     multipart-post (2.0.0)
+    newrelic_rpm (3.15.1.316)
     nio4r (1.2.1)
     nokogiri (1.6.8)
       mini_portile2 (~> 2.1.0)
@@ -143,6 +144,7 @@ DEPENDENCIES
   elasticsearch
   figaro
   listen (~> 3.0.5)
+  newrelic_rpm
   pg
   rails (~> 5.0.0)
   spring
