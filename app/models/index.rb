@@ -64,7 +64,8 @@ class Index
             }
           ]
         }
-      }
+      },
+      size: 50
     }
 
     # Add filters
