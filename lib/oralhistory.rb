@@ -2,7 +2,7 @@ module Oralhistory
 
   def oh_get_annotation_data(obj, parent_id)
     id = "#{parent_id}_ann_#{obj["start"]}_#{obj["end"]}"
-    entry = {index_name: Index.defaultName, doc_type: "annotation", doc_uid: id, doc_parent: parent_id, doc_data: ""}
+    entry = {doc_type: "annotation", doc_uid: id, doc_parent: parent_id, doc_data: ""}
 
     attributes = [
       {name: "start", type: "integer"},
@@ -39,7 +39,7 @@ module Oralhistory
     item_id = resp["slug"]
 
     # build item data
-    item_entry = {index_name: Index.defaultName, doc_type: "item", doc_uid: item_id, doc_data: ""}
+    item_entry = {doc_type: "item", doc_uid: item_id, doc_data: ""}
     item_data = parse_attributes(resp, attributes)
     if item_data
       item_entry[:doc_data] = item_data.to_json

@@ -12,7 +12,7 @@ module Transcripteditor
     item_id = resp["id"]
 
     # build item data
-    item_entry = {index_name: Index.defaultName, doc_type: "item", doc_uid: item_id, doc_data: ""}
+    item_entry = {doc_type: "item", doc_uid: item_id, doc_data: ""}
     item_data = parse_attributes(resp, attributes)
     if item_data
       item_entry[:doc_data] = item_data.to_json
@@ -53,7 +53,7 @@ module Transcripteditor
       # build line data
       # line_id = line["id"]
       line_id = "#{item_id}_line_#{line["sequence"]}"
-      line_entry = {index_name: Index.defaultName, doc_type: "line", doc_parent: item_id, doc_uid: line_id, doc_data: ""}
+      line_entry = {doc_type: "line", doc_parent: item_id, doc_uid: line_id, doc_data: ""}
       line_data = parse_attributes(line, attributes)
       if line_data
         line_entry[:doc_data] = line_data.to_json

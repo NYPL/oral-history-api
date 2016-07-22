@@ -21,7 +21,7 @@ class DocumentsController < ApplicationController
     queryBody = index.getSearchBody(query, filters)
     # puts queryBody.inspect
 
-    @results = client.search index: index.getDefaultName, type: 'item', body: queryBody
+    @results = client.search index: index.getCurrent, type: 'item', body: queryBody
 
     render :json => @results
   end

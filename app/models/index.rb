@@ -1,11 +1,19 @@
 class Index
 
-  def self.defaultName
-    ENV['INDEX_NAME'] || 'primary'
+  def self.current
+    "#{Index.name}#{Index.version}"
+  end
+
+  def self.name
+    ENV['INDEX_PREFIX'] || 'primary'
   end
 
   def self.validFilters
     ["collection_id"]
+  end
+
+  def self.version
+    ENV['INDEX_VERSION'] || ''
   end
 
   def getFilters(f)
@@ -67,8 +75,8 @@ class Index
     body
   end
 
-  def getDefaultName
-    Index.defaultName
+  def getCurrent
+    Index.current
   end
 
   def getMappings
@@ -77,13 +85,13 @@ class Index
         properties: {
           title: { type: "string", analyzer: "transcript_analyzer" },
           description: { type: "string", analyzer: "transcript_analyzer" },
-          collection_id: { type: "string" },
-          collection_title: { type: "string" },
-          collection_subtitle: { type: "string" },
+          collection_id: { type: "string", index: "not_analyzed" },
+          collection_title: { type: "string", index: "no" },
+          collection_subtitle: { type: "string", index: "no" },
           place_of_birth: { type: "string" },
           date_of_birth: { type: "date" },
-          audio_url: { type: "string" },
-          image_url: { type: "string" },
+          audio_url: { type: "string", index: "no" },
+          image_url: { type: "string", index: "no" },
           duration: { type: "integer" }
         }
       },
@@ -92,8 +100,8 @@ class Index
         properties: {
           start: { type: "integer" },
           end: { type: "integer" },
-          original_text: { type: "string", analyzer: "transcript_analyzer" },
-          best_text: { type: "string", analyzer: "transcript_analyzer" }
+          original_text: { type: "string", analyzer: "transcript_analyzer", index_options: "offsets" },
+          best_text: { type: "string", analyzer: "transcript_analyzer", index_options: "offsets" }
         }
       },
       annotation: {
@@ -101,7 +109,7 @@ class Index
         properties: {
           start: { type: "integer" },
           end: { type: "integer" },
-          text: { type: "string", analyzer: "transcript_analyzer" }
+          text: { type: "string", analyzer: "transcript_analyzer", index_options: "offsets" }
         }
       }
     }
