@@ -1,4 +1,3 @@
-require 'optparse'
 require 'transcripteditor'
 require 'util'
 require 'uri'
@@ -8,7 +7,7 @@ namespace :transcripteditor do
   include Util
   include Transcripteditor
 
-  # Usage rake transcripteditor:ingest -- --overwrite-metadata=true --overwrite-lines=false --updated-after=2016-01-01 --indexed-at=2016-01-01
+  # Usage rake transcripteditor:ingest overwrite_metadata=true overwrite_lines=false updated_after=2016-01-01 indexed_at=2016-01-01
   desc "Ingest transcripts from Open Transcript Editor"
   task :ingest => :environment do |task, args|
 
@@ -20,15 +19,13 @@ namespace :transcripteditor do
       indexed_at: false
     }
 
-    # Parse options
-    op = OptionParser.new
-    op.banner = "Usage: rake transcripteditor:ingest [options]"
-    op.on("-M", "--overwrite-metadata [true/false]", "Overwrite existing metadata") { |bool| options[:overwrite_metadata] = (bool=='true') }
-    op.on("-l", "--overwrite-lines [true/false]", "Overwrite existing lines") { |bool| options[:overwrite_lines] = (bool=='true') }
-    op.on("-u", "--updated-after [YYYY-MM-DD]", "Only include transcripts updated after date") { |date| options[:updated_after] = date }
-    op.on("-i", "--indexed-at [YYYY-MM-DD]", "Mark transcript as indexed at specified date") { |date| options[:indexed_at] = date }
-    args = op.order!(ARGV) {}
-    op.parse!(args)
+    options[:overwrite_metadata] = (ENV['overwrite_metadata']=='true') unless ENV['overwrite_metadata'].nil?
+    options[:overwrite_lines] = (ENV['overwrite_lines']=='true') unless ENV['overwrite_lines'].nil?
+    options[:updated_after] = ENV['updated_after'] unless ENV['updated_after'].nil?
+    options[:indexed_at] = ENV['indexed_at'] unless ENV['indexed_at'].nil?
+
+    # puts options.inspect
+    # exit
 
     source = URI.parse(ENV['TRANSCRIPT_EDITOR_URL']).host
     items = te_get_items(source, options[:updated_after])
@@ -66,8 +63,6 @@ namespace :transcripteditor do
         puts "Failed #{i+1} of #{total}: could not read #{item_json_url}"
       end
     end
-
-    exit 0
   end
 
 end

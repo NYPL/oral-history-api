@@ -1,4 +1,3 @@
-require 'optparse'
 require 'oralhistory'
 require 'util'
 
@@ -7,25 +6,23 @@ namespace :oralhistory do
   include Util
   include Oralhistory
 
-  # Usage rake oralhistory:ingest -- --overwrite-metadata=true --updated-after=2016-01-01 --indexed-at=2016-01-01
+  # Usage rake oralhistory:ingest overwrite_metadata=false updated_after=2016-01-01 indexed_at=2016-01-01
   desc "Ingest items and annotations from oralhistory.nypl.org"
-  task :ingest => :environment do |task, args|
+  task :ingest => :environment do
 
     # Default options
     options = {
-      overwrite_metadata: false,
+      overwrite_metadata: true,
       updated_after: false,
       indexed_at: false
     }
 
-    # Parse options
-    op = OptionParser.new
-    op.banner = "Usage: rake oralhistory:ingest [options]"
-    op.on("-M", "--overwrite-metadata [true/false]", "Overwrite existing metadata") { |bool| options[:overwrite_metadata] = (bool=='true') }
-    op.on("-u", "--updated-after [YYYY-MM-DD]", "Only include transcripts updated after date") { |date| options[:updated_after] = date }
-    op.on("-i", "--indexed-at [YYYY-MM-DD]", "Mark transcript as indexed at specified date") { |date| options[:indexed_at] = date }
-    args = op.order!(ARGV) {}
-    op.parse!(args)
+    options[:overwrite_metadata] = (ENV['overwrite_metadata']=='true') unless ENV['overwrite_metadata'].nil?
+    options[:updated_after] = ENV['updated_after'] unless ENV['updated_after'].nil?
+    options[:indexed_at] = ENV['indexed_at'] unless ENV['indexed_at'].nil?
+
+    # puts options.inspect
+    # exit
 
     # Retrieve all the items after last indexed date
     source = "oralhistory.nypl.org"
@@ -52,8 +49,6 @@ namespace :oralhistory do
       IngestItem.save({doc_uid: item_id, source: source})
       puts "Saved #{i+1} of #{total}"
     end
-
-    exit 0
   end
 
 end
