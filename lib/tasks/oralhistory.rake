@@ -53,6 +53,7 @@ namespace :oralhistory do
       puts "Saved #{i+1} of #{total}"
     end
 
+    exit 0
   end
 
 end

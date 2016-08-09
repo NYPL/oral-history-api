@@ -67,6 +67,7 @@ namespace :transcripteditor do
       end
     end
 
+    exit 0
   end
 
 end
