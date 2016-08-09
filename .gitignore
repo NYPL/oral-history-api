@@ -23,3 +23,6 @@
 # Ignore config
 /config/database.yml
 /config/application.yml
+/config/application.readonly.yml
+/data/*
+!/data/.keep
