@@ -9,6 +9,10 @@ class Document < ApplicationRecord
     "1970-01-01T00:00:00Z".to_datetime
   end
 
+  def self.getDocumentsForExporting
+    Document.where("doc_type = ?", "item")
+  end
+
   # get everything that has been updated but not indexed
   def self.getDocumentsForIndexing
     Document.where("updated_at > indexed_at")
@@ -19,6 +23,10 @@ class Document < ApplicationRecord
     last_indexed_document = Document.order(:indexed_at).last
     last_indexed_date = last_indexed_document[:indexed_at] if last_indexed_document
     last_indexed_date
+  end
+
+  def self.getTextDocumentsForExporting
+    Document.where("doc_type = ? OR doc_type = ?", "annotation", "line").order("doc_type ASC, doc_parent ASC, id ASC")
   end
 
   def self.markListAsIndexed(list)
