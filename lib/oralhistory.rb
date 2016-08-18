@@ -10,6 +10,9 @@ module Oralhistory
       {name: "text", type: "string", required: true}
     ]
     data = parse_attributes(obj, attributes)
+    # convert to milliseconds
+    data["start"] = data["start"] * 1000 if data["start"]
+    data["end"] = data["end"] * 1000 if data["end"]
     if data
       entry[:doc_data] = data.to_json
     else
