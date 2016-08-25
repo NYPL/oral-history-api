@@ -10,7 +10,7 @@ class Document < ApplicationRecord
   end
 
   def self.getDocumentsForExporting
-    Document.where("doc_type = ?", "item")
+    Document.where("doc_type = ?", "item").order("id ASC")
   end
 
   # get everything that has been updated but not indexed
