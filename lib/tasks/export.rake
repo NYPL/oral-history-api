@@ -75,7 +75,7 @@ namespace :export do
     puts "Writing #{rows.length} rows to file #{textsFile}"
 
     CSV.open(textsFile, "w") do |csv|
-      headers = ["parent_id", "type", "text", "start", "end", "url", "audio_url", "collection"]
+      headers = ["parent_id", "id", "type", "text", "start", "end", "url", "audio_url", "collection"]
       csv << headers
 
       rows.each_with_index do |row, i|
@@ -88,6 +88,7 @@ namespace :export do
         parent = docs[parent_index]
 
         # get columns
+        id = row[:doc_uid]
         text = ""
         data = JSON.parse(row[:doc_data])
         type = row[:doc_type]
@@ -109,7 +110,7 @@ namespace :export do
         end
 
         # add row
-        csv << [parent_id, type, text, ms_start, ms_end, url, audio_url, collection] unless text.blank?
+        csv << [parent_id, id, type, text, ms_start, ms_end, url, audio_url, collection] unless text.blank?
 
         if i % 1000 == 0
           puts "#{(1.0*i/rows.length*100).round}% complete"
